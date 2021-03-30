@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: manage
+  cloud:
+    nacos:
+      config:
+        namespace: 1c3464ea-4f5a-4bcf-96e9-5b95d0fb73e3
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        ext-config[0]:
+          data-id: mysql.yaml
+          refresh: true
+        ext-config[1]:
+          data-id: json.yaml
+          refresh: true
