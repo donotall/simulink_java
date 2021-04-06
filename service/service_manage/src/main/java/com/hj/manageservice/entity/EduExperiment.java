@@ -37,6 +37,9 @@ public class EduExperiment implements Serializable {
     @ApiModelProperty(value = "实验内容")
     private String description;
 
+    @ApiModelProperty(value = "课程id")
+    private String courseId;
+
     @ApiModelProperty(value = "实验学习视频")
     private String videoId;
 
@@ -47,6 +50,8 @@ public class EduExperiment implements Serializable {
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
+    @ApiModelProperty(value = "结束时间")
+    private Date gmtEnd;
 
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)

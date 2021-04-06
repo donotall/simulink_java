@@ -37,7 +37,9 @@ public class EduCourse implements Serializable {
     @ApiModelProperty(value = "实验班课人数")
     private Integer number;
 
-    @ApiModelProperty(value = "创建实验班课的用户id")
+    @ApiModelProperty(value = "实验班课实际人数")
+    private Integer realityNumber;
+    @ApiModelProperty(value = "创建实验班课的用户")
     private String userCreate;
 
     @ApiModelProperty(value = "课程描述")

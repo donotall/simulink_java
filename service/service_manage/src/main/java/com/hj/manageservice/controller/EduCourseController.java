@@ -7,11 +7,14 @@ import com.hj.commonutils.R;
 import com.hj.manageservice.entity.EduCourse;
 import com.hj.manageservice.service.EduCourseService;
 import com.hj.manageservice.vo.EduCourseVo;
+import com.hj.manageservice.vo.TeacherCourse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -50,12 +53,17 @@ public class EduCourseController {
             EduCourseVo eduCourse) {
         Page<EduCourse> pageParam = new Page<>(page, limit);
         QueryWrapper<EduCourse> wrapper = new QueryWrapper<>();
-        if(eduCourse.isFlag()){
-            String nameId = eduCourseService.getNameId();
-            wrapper.eq("user_create",nameId);
+        if(!StringUtils.isEmpty(eduCourse.getTeacherName())) {
+            wrapper.like("user_create",eduCourse.getTeacherName());
         }
-        if(!StringUtils.isEmpty(eduCourse.getCourseName())) {
-            wrapper.like("name",eduCourse.getCourseName());
+        if(!StringUtils.isEmpty(eduCourse.getName())) {
+            wrapper.like("name",eduCourse.getName());
+        }
+        if(!StringUtils.isEmpty(eduCourse.getBegin())){
+            wrapper.ge("gmt_create",eduCourse.getBegin());
+        }
+        if(!StringUtils.isEmpty(eduCourse.getEnd())){
+            wrapper.le("gmt_modified",eduCourse.getEnd());
         }
         eduCourseService.page(pageParam,wrapper);
         return R.ok().data("items", pageParam.getRecords()).data("total", pageParam.getTotal());
@@ -66,7 +74,17 @@ public class EduCourseController {
         boolean flag = eduCourseService.removeCourse(id);
         return flag?R.ok():R.error();
     }
-
-
+    // 根据id获取班课
+    @GetMapping("/{id}")
+    public  R getCourseById(@PathVariable String id){
+        EduCourse eduCourse = eduCourseService.getById(id);
+        return R.ok().data("course",eduCourse);
+    }
+    // 获取老师和班课的所有关联信息
+    @GetMapping("/teachercourse")
+    public R getTeacherCourseRelated(){
+       List<TeacherCourse> teacherCourseList = eduCourseService.getTeacherCourse();
+        return R.ok().data("list",teacherCourseList);
+    }
 }
 

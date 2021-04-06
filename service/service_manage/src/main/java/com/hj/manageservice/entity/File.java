@@ -33,6 +33,9 @@ public class File implements Serializable {
     @ApiModelProperty(value = "文件地址")
     private String url;
 
+    @ApiModelProperty(value = "文件名称")
+    private String fileName;
+
     @ApiModelProperty(value = "实验id")
     private String experimentId;
 

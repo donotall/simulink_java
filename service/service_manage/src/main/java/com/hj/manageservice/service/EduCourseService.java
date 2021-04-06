@@ -2,6 +2,9 @@ package com.hj.manageservice.service;
 
 import com.hj.manageservice.entity.EduCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hj.manageservice.vo.TeacherCourse;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface EduCourseService extends IService<EduCourse> {
 
     boolean AddCourse(EduCourse eduCourse);
-    String getNameId();
     boolean removeCourse(String id);
+
+    List<TeacherCourse> getTeacherCourse();
 }

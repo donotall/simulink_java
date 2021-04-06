@@ -1,7 +1,9 @@
 package com.hj.commonutils.vo;
 
 import com.sun.jna.Structure;
+import lombok.Data;
 
+@Data
 public class Scopedata{
     public static class scopedata extends  Structure{
         public   int    number;

@@ -26,6 +26,7 @@ public class IndexController {
         //获取当前登录用户用户名
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String, Object> userInfo = indexService.getUserInfo(username);
+
         return R.ok().data(userInfo);
     }
 
@@ -44,11 +45,6 @@ public class IndexController {
     @PostMapping("logout")
     public R logout(){
         return R.ok();
-    }
-    @GetMapping("getName")
-    public String getName(){
-        String id =indexService.getNameId(SecurityContextHolder.getContext().getAuthentication().getName());
-        return id;
     }
 
 }
