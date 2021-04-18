@@ -2,6 +2,7 @@ package com.hj.educenter.mapper;
 
 import com.hj.educenter.entity.UcenterMember;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import feign.Param;
 
 import javax.xml.crypto.Data;
 
@@ -15,4 +16,5 @@ import javax.xml.crypto.Data;
  */
 public interface UcenterMemberMapper extends BaseMapper<UcenterMember> {
     Integer selectRegisterCount(String day);
+    Boolean changeDisable(@Param("id")String id, @Param("disable") Integer disable);
 }

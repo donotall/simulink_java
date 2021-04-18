@@ -18,6 +18,5 @@ public interface EduCourseService extends IService<EduCourse> {
 
     boolean AddCourse(EduCourse eduCourse);
     boolean removeCourse(String id);
-
     List<TeacherCourse> getTeacherCourse();
 }

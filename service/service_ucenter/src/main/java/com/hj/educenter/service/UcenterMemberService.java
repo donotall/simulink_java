@@ -1,5 +1,6 @@
 package com.hj.educenter.service;
 
+import com.hj.commonutils.vo.CourseVo;
 import com.hj.educenter.entity.UcenterMember;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hj.educenter.entity.vo.LoginVo;
@@ -26,4 +27,8 @@ public interface UcenterMemberService extends IService<UcenterMember> {
     Integer countRegisterByDay(String day);
 
     List<UcenterMember> getListByCourseId(String courseId);
+
+    boolean ChangeDisabled(String id, Integer disable);
+
+    List<CourseVo> getCourseList(String id, String judge);
 }

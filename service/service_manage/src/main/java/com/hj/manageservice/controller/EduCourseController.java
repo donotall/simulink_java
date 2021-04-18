@@ -4,16 +4,20 @@ package com.hj.manageservice.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.R;
+import com.hj.commonutils.vo.CourseVo;
 import com.hj.manageservice.entity.EduCourse;
 import com.hj.manageservice.service.EduCourseService;
 import com.hj.manageservice.vo.EduCourseVo;
 import com.hj.manageservice.vo.TeacherCourse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -85,6 +89,18 @@ public class EduCourseController {
     public R getTeacherCourseRelated(){
        List<TeacherCourse> teacherCourseList = eduCourseService.getTeacherCourse();
         return R.ok().data("list",teacherCourseList);
+    }
+    // 根据班课id获取信息
+    @GetMapping("/batches")
+    public List<CourseVo> getBatchesCourse(@RequestParam List<String> ids){
+        Collection<EduCourse> eduCourses = eduCourseService.listByIds(ids);
+        List<CourseVo> courseVoList = new ArrayList<>();
+        eduCourses.forEach(eduCourse -> {
+            CourseVo courseVo = new CourseVo();
+            BeanUtils.copyProperties(eduCourse,courseVo);
+            courseVoList.add(courseVo);
+        });
+        return courseVoList;
     }
 }
 

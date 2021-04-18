@@ -6,5 +6,9 @@
             FROM ucenter_member
             WHERE DATE(gmt_create) = #{value}
    </select>
+    <update id="changeDisable">
+        update ucenter_member set is_disabled = #{param2} where  id  = #{param1}
+    </update>
+
 
 </mapper>

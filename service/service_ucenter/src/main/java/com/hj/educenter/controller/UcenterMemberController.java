@@ -1,19 +1,25 @@
 package com.hj.educenter.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.JwtUtils;
 import com.hj.commonutils.R;
+import com.hj.commonutils.vo.CourseVo;
 import com.hj.educenter.entity.UcenterMember;
 import com.hj.educenter.entity.UserCourse;
+import com.hj.educenter.entity.vo.ChangeDisableVo;
 import com.hj.educenter.entity.vo.LoginVo;
 import com.hj.educenter.entity.vo.RegisterVo;
-import com.hj.educenter.mapper.UserCourseMapper;
+import com.hj.educenter.entity.vo.UserVo;
 import com.hj.educenter.service.UcenterMemberService;
 import com.hj.educenter.service.UserCourseService;
 import com.hj.servicebase.exceptionhandler.SLException;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -89,6 +95,34 @@ public class UcenterMemberController {
         userCourse.setUserid(memberId);
         boolean save = userCourseService.save(userCourse);
         return save?R.ok():R.error();
+    }
+    //获取所有用户信息
+    @GetMapping("{page}/{limit}")
+    public R index(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
+
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit,
+            UserVo userVo) {
+        Page<UcenterMember> pageParam = new Page<>(page, limit);
+        QueryWrapper<UcenterMember> wrapper = new QueryWrapper<>();
+        if(!StringUtils.isEmpty(userVo.getNickname())){
+            wrapper.like("nickname",userVo.getNickname());
+        }
+        memberService.page(pageParam,wrapper);
+        return R.ok().data("items", pageParam.getRecords()).data("total", pageParam.getTotal());
+    }
+    @PutMapping("/changeDisable")
+    public R changeDisabled(@RequestBody ChangeDisableVo changeDisableVo){
+      boolean flag =   memberService.ChangeDisabled(changeDisableVo.getId(),changeDisableVo.getDisabled()?1:0);
+      return flag?R.ok():R.error();
+    }
+    // 根据用户名获取用户加入班课
+    @GetMapping("/getUser/{judge}")
+    public R getUserMessage(@RequestParam String id,@PathVariable String judge){
+        List<CourseVo> courseList = memberService.getCourseList(id, judge);
+        return R.ok().data("course",courseList);
     }
 }
 

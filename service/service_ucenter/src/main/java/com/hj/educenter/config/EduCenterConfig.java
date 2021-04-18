@@ -10,10 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients
-@EnableDiscoveryClient
 @MapperScan("com.hj.educenter.mapper")
-@ComponentScan({"com.hj"})
 public class EduCenterConfig {
     @Bean
     public ISqlInjector sqlInjector() {

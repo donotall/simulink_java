@@ -91,6 +91,9 @@ public class EduExperimentServiceImpl extends ServiceImpl<EduExperimentMapper, E
         if(!StringUtils.isEmpty(experimentVO.getEnd())){
             wrapper.le("gmt_end",experimentVO.getEnd());
         }
+        if(!StringUtils.isEmpty(experimentVO.getCourseId())){
+            wrapper.eq("course_id",experimentVO.getCourseId());
+        }
         experimentService.page(pageParam, wrapper);
         List<ExperimentPage> experimentPageList = new ArrayList<>();
         ExperimentPages experimentPages = new ExperimentPages();
