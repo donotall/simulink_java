@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Api(description="阿里云文件管理")
 @RestController
 @RequestMapping("eduoss/fileoss/")
@@ -26,5 +28,10 @@ public class OssController {
         // 返回oss文件路径
         String url = ossService.uploadFileAvatar(file);
         return url;
+    }
+    @PostMapping("img/{id}/{eid}")
+    public List<String> uploadImg(@RequestBody String[] imgLists,@PathVariable String id,@PathVariable String eid){
+        List<String> imgListUrl  = ossService.uploadImg(imgLists,id,eid);
+        return imgListUrl;
     }
 }

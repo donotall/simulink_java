@@ -84,4 +84,9 @@ public class SimulinkController {
         boolean connection = simulinkService.CloseConnection(port);
         return connection?R.ok():R.error();
     }
+    @GetMapping("stop/{port}")
+    public R stopModel(@PathVariable int port){
+        Boolean stop = simulinkService.stopModel(port);
+        return stop?R.ok():R.error();
+    }
 }

@@ -19,8 +19,6 @@ import java.util.concurrent.Future;
 
 @Service
 public class SimulinkServiceImpl implements SimulinkService {
-    static ExecutorService executorService = Executors.newFixedThreadPool(20);
-
     /**
      * 得到target的设置
      * @param port
@@ -43,7 +41,6 @@ public class SimulinkServiceImpl implements SimulinkService {
      */
     @Override
     public String UseSimulink(MultipartFile file,int port) {
-        executorService.submit(()->{
             String originalFilename = file.getOriginalFilename();
             String filename = originalFilename.substring(0, originalFilename.lastIndexOf("."));
             //保存到本地
@@ -70,7 +67,6 @@ public class SimulinkServiceImpl implements SimulinkService {
             } catch (ExecutionException e) {
                 throw new SLException(20001,"进入文件夹失败！");
             }
-        });
         return file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf("."));
     }
 
@@ -176,6 +172,18 @@ public class SimulinkServiceImpl implements SimulinkService {
     @Override
     public boolean ModelStart(int port) {
         SimulinkUtils.getInstance.xPCStartApp(port);
+        int lastError = SimulinkUtils.getInstance.xPCGetLastError();
+        if(lastError !=0){
+            String message ="";
+            throw new SLException(20001,SimulinkUtils.getInstance.xPCErrorMsg(lastError,message)+"---运行模型失败！");
+        }else {
+            return true;
+        }
+    }
+
+    @Override
+    public Boolean stopModel(int port) {
+        SimulinkUtils.getInstance.xPCStopApp(port);
         int lastError = SimulinkUtils.getInstance.xPCGetLastError();
         if(lastError !=0){
             String message ="";

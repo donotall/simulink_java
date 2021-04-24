@@ -21,4 +21,6 @@ public interface SimulinkService {
     boolean CloseConnection(int port);
 
     boolean ModelStart(int port);
+
+    Boolean stopModel(int port);
 }

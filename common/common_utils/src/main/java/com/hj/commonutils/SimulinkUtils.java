@@ -45,4 +45,5 @@ public interface SimulinkUtils extends Library {
    public int xPCGetSignals(int port, int numSignals,int []signals,double []values);
    public String xPCGetSignalName(int port, int sigIdx,String sigName);
    public void xPCScGetSignalList(int port, int scNum, int[]data);
+   public double xPCGetExecTime(int port);
 }

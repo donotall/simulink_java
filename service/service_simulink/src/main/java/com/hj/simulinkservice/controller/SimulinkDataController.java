@@ -1,6 +1,7 @@
 package com.hj.simulinkservice.controller;
 
 import com.hj.commonutils.R;
+import com.hj.commonutils.SimulinkUtils;
 import com.hj.simulinkservice.service.SimulinkDataService;
 import com.hj.simulinkservice.vo.ScopeVo;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,7 @@ public class SimulinkDataController {
     @GetMapping("/getData/{port}")
     public  R GetData(@PathVariable int port){
         double[] datas= simulinkDataService.GetDataFromXpc(port);
-        return R.ok().data("data",datas);
+        double time = SimulinkUtils.getInstance.xPCGetExecTime(port);
+        return R.ok().data("data",datas).data("currentTime",time);
     }
 }

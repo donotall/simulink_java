@@ -47,7 +47,7 @@ public class EduCourseController {
     }
     // 得到班课
     @ApiOperation(value = "获取班课分页列表")
-    @GetMapping("{page}/{limit}")
+    @GetMapping("client/{page}/{limit}")
     public R index(
             @ApiParam(name = "page", value = "当前页码", required = true)
             @PathVariable Long page,
@@ -84,6 +84,14 @@ public class EduCourseController {
         EduCourse eduCourse = eduCourseService.getById(id);
         return R.ok().data("course",eduCourse);
     }
+    //根据id获取班课信息
+    @GetMapping("/client/courseById/{id}")
+    public  CourseVo getCourse(@PathVariable String id){
+        EduCourse eduCourse = eduCourseService.getById(id);
+        CourseVo courseVo = new CourseVo();
+        BeanUtils.copyProperties(eduCourse,courseVo);
+        return courseVo;
+    }
     // 获取老师和班课的所有关联信息
     @GetMapping("/teachercourse")
     public R getTeacherCourseRelated(){
@@ -91,7 +99,7 @@ public class EduCourseController {
         return R.ok().data("list",teacherCourseList);
     }
     // 根据班课id获取信息
-    @GetMapping("/batches")
+    @GetMapping("client/batches")
     public List<CourseVo> getBatchesCourse(@RequestParam List<String> ids){
         Collection<EduCourse> eduCourses = eduCourseService.listByIds(ids);
         List<CourseVo> courseVoList = new ArrayList<>();
@@ -101,6 +109,13 @@ public class EduCourseController {
             courseVoList.add(courseVo);
         });
         return courseVoList;
+    }
+    //修改班课实际人数
+    @PutMapping("client/changeNumber")
+    public Boolean changeCourseNumber(@RequestBody CourseVo courseVo){
+        EduCourse eduCourse = new EduCourse();
+        BeanUtils.copyProperties(courseVo,eduCourse);
+        return eduCourseService.updateById(eduCourse);
     }
 }
 

@@ -30,10 +30,6 @@ public class SimulinkDataServiceImpl implements SimulinkDataService {
         if(i<0){
             throw new SLException(20001,"获取数据失败！");
         }
-        for (int j = 0; j <numSignals ; j++) {
-            System.out.print(sigVal[j]);
-        }
-        System.out.println();
         return sigVal;
     }
 }

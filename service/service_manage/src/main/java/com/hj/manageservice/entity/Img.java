@@ -18,28 +18,28 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author hj
- * @since 2021-04-18
+ * @since 2021-04-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="XpcAttr对象", description="")
-public class XpcAttr implements Serializable {
+@ApiModel(value="Img对象", description="")
+public class Img implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "可用ip地址id")
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
-    @ApiModelProperty(value = "ip地址")
-    private String ip;
+    @ApiModelProperty(value = "用户id")
+    private String userId;
 
-    @ApiModelProperty(value = "端口号")
-    private Integer port;
+    @ApiModelProperty(value = "实验id")
+    private String experimentId;
 
-    @ApiModelProperty(value = "是否被使用1(true) ,0(false)")
-    private Integer isUse;
+    @ApiModelProperty(value = "图片地址")
+    private String url;
+
     @TableLogic
     @ApiModelProperty(value = "逻辑删除 1（true）已删除， 0（false）未删除")
     private Boolean isDeleted;
@@ -47,7 +47,6 @@ public class XpcAttr implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
     private Date gmtCreate;
-
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
     private Date gmtModified;
