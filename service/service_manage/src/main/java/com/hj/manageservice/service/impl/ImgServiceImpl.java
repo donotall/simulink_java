@@ -30,10 +30,10 @@ public class ImgServiceImpl extends ServiceImpl<ImgMapper, Img> implements ImgSe
     public Boolean uploadImg(String[] imgLists, String uId,String eId) {
         List<String> strings = ossClient.uploadImg(imgLists, uId,eId);
         List<Img> imgList = new ArrayList<>();
-        Img img1 = new Img();
-        img1.setExperimentId(eId);
-        img1.setUserId(uId);
-        for (String img:imgLists) {
+        for (String img:strings) {
+            Img img1 = new Img();
+            img1.setExperimentId(eId);
+            img1.setUserId(uId);
             img1.setUrl(img);
             imgList.add(img1);
         }

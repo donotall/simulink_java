@@ -3,11 +3,13 @@ package com.hj.simulinkservice.service.impl;
 import com.hj.commonutils.SaveFile;
 import com.hj.commonutils.SimulinkUtils;
 import com.hj.servicebase.exceptionhandler.SLException;
+import com.hj.simulinkservice.client.AttrClient;
 import com.hj.simulinkservice.service.SimulinkService;
 import com.hj.simulinkservice.vo.TargetSettingVo;
 import com.mathworks.engine.EngineException;
 import com.mathworks.engine.MatlabEngine;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

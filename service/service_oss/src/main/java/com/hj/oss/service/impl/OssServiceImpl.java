@@ -60,26 +60,27 @@ public class OssServiceImpl implements OssService {
             // 创建OSSClient实例。
             OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
             for (String imgBase64:imgLists) {
+                String imgBase = imgBase64.substring(imgBase64.indexOf(",")+1);
+
                 BASE64Decoder decoder = new BASE64Decoder();
-                byte[] bytes = decoder.decodeBuffer(imgBase64);
+                byte[] bytes = decoder.decodeBuffer(imgBase);
                 for (int i = 0; i < bytes.length; ++i) {
                     if (bytes[i] < 0) {// 调整异常数据
                         bytes[i] += 256;
                     }
                 }
                 InputStream inputStream = new ByteArrayInputStream(bytes);
-                String filename = "student/"+id+"/"+eid+"/"+UUID.randomUUID().toString().replaceAll("-", "")+".jpg";
+                String filename = "student/"+id+"/"+eid+"/"+UUID.randomUUID().toString().replaceAll("-", "")+"."+imgBase64.substring(imgBase64.indexOf("/")+1,imgBase64.indexOf(";"));
                 // 获取文件名称
                 ossClient.putObject(bucketName,filename, inputStream);
                 // 创建存储空间。
                 ossClient.createBucket(bucketName);
-                // 关闭OSSClient。
-                ossClient.shutdown();
                 //把上传的文件路径返回
                 String url = "https://"+bucketName+"."+endpoint+"/"+filename;
                 imgUrls.add(url);
-
             }
+            // 关闭OSSClient。
+            ossClient.shutdown();
         } catch (IOException e) {
             e.printStackTrace();
         }

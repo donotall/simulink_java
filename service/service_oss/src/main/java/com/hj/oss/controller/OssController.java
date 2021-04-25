@@ -16,7 +16,7 @@ public class OssController {
     @Autowired
     private OssService ossService;
     //上传文件的方法
-    @PostMapping
+    @PostMapping("/file")
     public R uploadOssFile(@RequestParam("file") MultipartFile file){
         // 返回oss文件路径
         String url = ossService.uploadFileAvatar(file);

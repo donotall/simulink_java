@@ -25,7 +25,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 6000
+            timeoutInMilliseconds: 30000
 ribbon:
   eager-load:
     enabled: true

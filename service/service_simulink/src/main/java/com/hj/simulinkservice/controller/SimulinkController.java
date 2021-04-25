@@ -1,6 +1,7 @@
 package com.hj.simulinkservice.controller;
 
 import com.hj.commonutils.R;
+import com.hj.simulinkservice.client.AttrClient;
 import com.hj.simulinkservice.service.SimulinkService;
 import com.hj.simulinkservice.vo.TargetSettingVo;
 import io.swagger.annotations.Api;
@@ -15,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class SimulinkController {
     @Autowired
     private SimulinkService simulinkService;
+    @Autowired
+    private AttrClient attrClient;
     //2.上传文件以及文件的编译
     @ApiOperation("2.上传文件以及文件的编译")
     @PostMapping("file/{port}")
@@ -25,11 +28,12 @@ public class SimulinkController {
     }
     //1.获取连接
     @ApiOperation("1.获取连接")
-    @GetMapping("connect/{connectId}/{port}")
-    public R ConnectSimulinkRealTime(@ApiParam(required = true,value = "simulink机器地址")
+    @GetMapping("connect/{id}/{connectId}/{port}")
+    public R ConnectSimulinkRealTime(@PathVariable String id,@ApiParam(required = true,value = "simulink机器地址")
                                          @PathVariable(required = true) String connectId,@PathVariable String port){
          int linkport = simulinkService.Conection(connectId,port);
-        return linkport!=-1?R.ok().message("连接成功！").data("port",linkport):R.error().message("连接失败！");
+        Boolean attr = attrClient.updateAttr(id);
+        return linkport!=-1&&attr?R.ok().message("连接成功！").data("port",linkport):R.error().message("连接失败！");
     }
     // xpc目标机注册
     @PostMapping("registerTarget")
@@ -79,10 +83,11 @@ public class SimulinkController {
     }
     //7.关闭连接卸载模型
     @ApiOperation("7.关闭连接卸载模型")
-    @GetMapping("close/{port}")
-    public R CloseModel(@PathVariable int port){
+    @GetMapping("close/{id}/{port}")
+    public R CloseModel(@PathVariable String id,@PathVariable int port){
         boolean connection = simulinkService.CloseConnection(port);
-        return connection?R.ok():R.error();
+        Boolean attr = attrClient.updateAttr(id);
+        return connection&&attr?R.ok():R.error();
     }
     @GetMapping("stop/{port}")
     public R stopModel(@PathVariable int port){
