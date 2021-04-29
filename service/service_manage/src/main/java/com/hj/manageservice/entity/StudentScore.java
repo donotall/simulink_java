@@ -43,6 +43,9 @@ public class StudentScore implements Serializable {
     @ApiModelProperty(value = "完成情况 1完成，0未完成")
     private Boolean finished;
 
+    @ApiModelProperty(value = "是否评分情况 1是，0不是")
+    private Boolean isScore;
+
     @TableLogic
     @ApiModelProperty(value = "逻辑删除 1（true）已删除， 0（false）未删除")
     private Boolean isDeleted;

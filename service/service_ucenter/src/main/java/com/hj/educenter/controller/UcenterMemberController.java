@@ -23,7 +23,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -80,11 +82,23 @@ public class UcenterMemberController {
         Integer count = memberService.countRegisterByDay(day);
         return R.ok().data("countRegister", count);
     }
-    // 根据课程id获取参见班课人的信息
+    // 根据课程id获取参加班课人的信息
     @GetMapping("course/{courseId}")
     public R getUserByCourseId(@PathVariable String courseId ){
         List<UcenterMember> users = memberService.getListByCourseId(courseId);
         return R.ok().data("users",users);
+    }
+    // 根据课程id获取参加班课人的信息
+    @GetMapping("course/{courseId}")
+    public Map<String,String> getUserCourseId(@PathVariable String courseId ){
+        QueryWrapper<UserCourse> wrapper = new QueryWrapper<>();
+        wrapper.eq("",courseId);
+        List<UserCourse> userCourses = userCourseService.list(wrapper);
+        Map<String,String> uc = new HashMap<>();
+        for (UserCourse userCourse:userCourses) {
+            uc.put(userCourse.getUserid(),userCourse.getClassid());
+        }
+        return  uc;
     }
     //加入班课
     @PostMapping("joinCourse/{classId}")

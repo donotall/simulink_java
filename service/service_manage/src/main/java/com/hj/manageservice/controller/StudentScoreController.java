@@ -8,6 +8,7 @@ import com.hj.manageservice.entity.EduCourse;
 import com.hj.manageservice.entity.StudentScore;
 import com.hj.manageservice.service.StudentScoreService;
 import com.hj.manageservice.vo.EduCourseVo;
+import com.hj.manageservice.vo.MaxMin;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class StudentScoreController {
     public R finishEx(@RequestBody StudentScore studentScore){
         studentScore.setFinished(true);
         studentScore.setScore(0);
+        studentScore.setIsScore(false);
         studentScoreService.save(studentScore);
         return R.ok();
     }
@@ -47,6 +49,10 @@ public class StudentScoreController {
         Page<StudentScore> pageParam = new Page<>(page, limit);
         QueryWrapper<StudentScore> wrapper = new QueryWrapper<>();
         wrapper.eq("experiment_id", id);
+        //按照是否评分分组
+        wrapper.groupBy("is_score");
+        // 并且按照评分高低排序
+        wrapper.orderByAsc("score");
         studentScoreService.page(pageParam, wrapper);
         return R.ok().data("items", pageParam.getRecords()).data("total", pageParam.getTotal());
     }
@@ -56,8 +62,16 @@ public class StudentScoreController {
         QueryWrapper<StudentScore> wrapper = new QueryWrapper<>();
         wrapper.eq("experiment_id",studentScore.getExperimentId());
         wrapper.eq("user_id",studentScore.getUserId());
+        // 设置为老师已经评分
+        studentScore.setIsScore(true);
         boolean update = studentScoreService.update(studentScore, wrapper);
         return update?R.ok():R.error();
+    }
+    //根据用户id获取分数的最大最小值
+    @GetMapping("/score/minmax/{id}")
+    public R getScoreMaxMinById(@PathVariable String id){
+      MaxMin maxMin = studentScoreService.getMaxMin(id);
+      return R.ok().data("score",maxMin);
     }
 
 }

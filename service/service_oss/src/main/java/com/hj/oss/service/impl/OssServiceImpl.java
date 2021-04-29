@@ -30,7 +30,7 @@ public class OssServiceImpl implements OssService {
             OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
             InputStream inputStream = file.getInputStream();
             // 获取文件名称
-            String filename = file.getOriginalFilename();
+            String filename ="teacher/"+UUID.randomUUID().toString().replaceAll("-", "")+"/"+file.getOriginalFilename();
             ossClient.putObject(bucketName,filename, inputStream);
 
             // 创建存储空间。

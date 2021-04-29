@@ -14,5 +14,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface  AclClient {
 
     @GetMapping("/user/acl/user/getAll")
-    public UserVos getUserList();
+    UserVos getUserList();
 }

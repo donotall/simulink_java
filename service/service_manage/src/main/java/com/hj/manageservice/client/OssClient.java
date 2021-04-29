@@ -12,5 +12,5 @@ import java.util.List;
 @FeignClient(value = "service-oss")
 public interface OssClient {
     @PostMapping("eduoss/fileoss/img/{id}/{eid}")
-    public List<String> uploadImg(@RequestBody String[] imgLists, @PathVariable("id") String id,@PathVariable("eid") String eid);
+    List<String> uploadImg(@RequestBody String[] imgLists, @PathVariable("id") String id,@PathVariable("eid") String eid);
 }
