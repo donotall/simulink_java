@@ -31,3 +31,7 @@ spring:
         id: service-ucenter
         uri: lb://service-ucenter
         predicates: Path=/educenter/**
+      routes[5]:
+        id: service-msm
+        uri: lb://service-msm
+        predicates: Path=/eduemsm/**

@@ -2,7 +2,7 @@ package com.hj.manageservice.mapper;
 
 import com.hj.manageservice.entity.StudentScore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hj.manageservice.vo.MaxMin;
+import com.hj.manageservice.entity.vo.MaxMin;
 
 /**
  * <p>

@@ -2,27 +2,22 @@ package com.hj.manageservice.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.R;
-import com.hj.manageservice.entity.EduCourse;
 import com.hj.manageservice.entity.EduExperiment;
+import com.hj.manageservice.entity.File;
 import com.hj.manageservice.entity.Img;
-import com.hj.manageservice.service.EduCourseService;
 import com.hj.manageservice.service.EduExperimentService;
 import com.hj.manageservice.service.FileService;
 import com.hj.manageservice.service.ImgService;
-import com.hj.manageservice.vo.EduExperimentVo;
-import com.hj.manageservice.vo.ExperimentPage;
-import com.hj.manageservice.vo.ExperimentPages;
-import com.hj.manageservice.vo.ExperimentVO;
+import com.hj.manageservice.entity.vo.EduExperimentVo;
+import com.hj.manageservice.entity.vo.ExperimentPages;
+import com.hj.manageservice.entity.vo.ExperimentVO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,9 +45,19 @@ public class EduExperimentController {
     }
     // 修改实验
     @PutMapping("update")
-    public R UpdateCourse(@RequestBody EduExperiment eduExperiment){
-        boolean b = experimentService.updateById(eduExperiment);
+    public R UpdateCourse(@RequestBody EduExperimentVo eduExperiment){
+        boolean b = experimentService.updateExperiment(eduExperiment);
         return b?R.ok():R.error();
+    }
+    // 根据实验id获取实验的详情
+    @GetMapping("getEx/{id}")
+    public R GetExperimentById(@PathVariable String id){
+        EduExperiment experiment = experimentService.getById(id);
+        QueryWrapper<File> wrapper = new QueryWrapper<>();
+        wrapper.eq("experiment_id",id);
+        //根据实验id获取文件列表
+        List<File> fileList = fileService.list(wrapper);
+        return R.ok().data("experiment",experiment).data("fileList",fileList);
     }
     // 根据课程id得到实验
     @GetMapping("/list/{courseId}")

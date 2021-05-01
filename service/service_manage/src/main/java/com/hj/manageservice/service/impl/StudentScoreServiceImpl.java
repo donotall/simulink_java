@@ -2,14 +2,13 @@ package com.hj.manageservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hj.manageservice.client.UcenterClient;
-import com.hj.manageservice.entity.EduCourse;
 import com.hj.manageservice.entity.EduExperiment;
 import com.hj.manageservice.entity.StudentScore;
 import com.hj.manageservice.mapper.StudentScoreMapper;
 import com.hj.manageservice.service.EduExperimentService;
 import com.hj.manageservice.service.StudentScoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hj.manageservice.vo.MaxMin;
+import com.hj.manageservice.entity.vo.MaxMin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +87,6 @@ public class StudentScoreServiceImpl extends ServiceImpl<StudentScoreMapper, Stu
     // 返回最大最小值
     @Override
     public MaxMin getMaxMin(String id) {
-        return studentScoreService.getMaxMin(id);
+        return baseMapper.getMaxMIn(id);
     }
 }

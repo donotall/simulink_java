@@ -2,7 +2,7 @@ package com.hj.manageservice.service;
 
 import com.hj.manageservice.entity.EduCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hj.manageservice.vo.TeacherCourse;
+import com.hj.manageservice.entity.vo.TeacherCourse;
 
 import java.util.List;
 

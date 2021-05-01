@@ -4,16 +4,22 @@ package com.hj.manageservice.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.R;
-import com.hj.manageservice.entity.EduCourse;
+import com.hj.commonutils.vo.UcenterMember;
+import com.hj.manageservice.client.UcenterClient;
+import com.hj.manageservice.entity.EduExperiment;
 import com.hj.manageservice.entity.StudentScore;
+import com.hj.manageservice.entity.vo.Scores;
+import com.hj.manageservice.service.EduExperimentService;
 import com.hj.manageservice.service.StudentScoreService;
-import com.hj.manageservice.vo.EduCourseVo;
-import com.hj.manageservice.vo.MaxMin;
+import com.hj.manageservice.entity.vo.MaxMin;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -28,6 +34,10 @@ import org.springframework.web.bind.annotation.*;
 public class StudentScoreController {
     @Autowired
     private StudentScoreService studentScoreService;
+    @Autowired
+    private EduExperimentService experimentService;
+    @Autowired
+    private UcenterClient ucenterClient;
     @PostMapping("finish")
     public R finishEx(@RequestBody StudentScore studentScore){
         studentScore.setFinished(true);
@@ -53,18 +63,30 @@ public class StudentScoreController {
         wrapper.groupBy("is_score");
         // 并且按照评分高低排序
         wrapper.orderByAsc("score");
-        studentScoreService.page(pageParam, wrapper);
-        return R.ok().data("items", pageParam.getRecords()).data("total", pageParam.getTotal());
+       studentScoreService.page(pageParam, wrapper);
+       List<Scores> scoresList = new ArrayList<>();
+        //根据实验id获取实验和根据用户id获取用户
+        for(StudentScore studentScore:pageParam.getRecords()){
+            Scores scores = new Scores();
+            BeanUtils.copyProperties(studentScore,scores);
+            EduExperiment experiment = experimentService.getById(studentScore.getExperimentId());
+            scores.setExperimentName(experiment.getName());
+            UcenterMember member = ucenterClient.getInfo(studentScore.getUserId());
+            scores.setUserName(member.getNickname());
+            scoresList.add(scores);
+        }
+
+        return R.ok().data("items", scoresList).data("total", pageParam.getTotal());
     }
     // 修改学生成绩
-    @PutMapping("setScore")
-    public R setScore(@RequestBody StudentScore studentScore){
-        QueryWrapper<StudentScore> wrapper = new QueryWrapper<>();
-        wrapper.eq("experiment_id",studentScore.getExperimentId());
-        wrapper.eq("user_id",studentScore.getUserId());
-        // 设置为老师已经评分
+    @PutMapping("setScore/{id}/{score}")
+    public R setScore(@PathVariable String id,@PathVariable int score){
+        StudentScore studentScore = new StudentScore();
+        studentScore.setId(id);
+        studentScore.setScore(score);
         studentScore.setIsScore(true);
-        boolean update = studentScoreService.update(studentScore, wrapper);
+        studentScore.setFinished(true);
+        boolean update = studentScoreService.updateById(studentScore);
         return update?R.ok():R.error();
     }
     //根据用户id获取分数的最大最小值

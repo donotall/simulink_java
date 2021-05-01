@@ -1,4 +1,4 @@
-package com.hj.manageservice.vo;
+package com.hj.manageservice.entity.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

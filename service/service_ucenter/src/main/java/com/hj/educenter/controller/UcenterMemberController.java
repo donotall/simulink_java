@@ -2,6 +2,7 @@ package com.hj.educenter.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.JwtUtils;
 import com.hj.commonutils.R;
@@ -55,7 +56,10 @@ public class UcenterMemberController {
         memberService.register(registerVo);
         return R.ok();
     }
-
+    @PutMapping("/change")
+    public R changeUser(@RequestBody UcenterMember ucenterMember){
+        return memberService.updateById(ucenterMember)?R.ok():R.error();
+    }
     @ApiOperation(value = "根据token获取登录信息")
     @GetMapping("auth/getLoginInfo")
     public R getLoginInfo(HttpServletRequest request){
@@ -83,10 +87,10 @@ public class UcenterMemberController {
         return R.ok().data("countRegister", count);
     }
     // 根据课程id获取参加班课人的信息
-    @GetMapping("course/{courseId}")
-    public R getUserByCourseId(@PathVariable String courseId ){
-        List<UcenterMember> users = memberService.getListByCourseId(courseId);
-        return R.ok().data("users",users);
+    @GetMapping("course/{courseId}/{page}/{limit}")
+    public R getUserByCourseId(@PathVariable String courseId ,@PathVariable Long page,@PathVariable Long limit){
+        IPage<UcenterMember> users = memberService.getListByCourseId(courseId,page,limit);
+        return R.ok().data("users",users.getRecords()).data("total",users.getTotal());
     }
     // 根据课程id获取参加班课人的信息
     @GetMapping("course/{courseId}")
@@ -133,9 +137,9 @@ public class UcenterMemberController {
       return flag?R.ok():R.error();
     }
     // 根据用户名获取用户加入班课
-    @GetMapping("/getUser/{judge}")
-    public R getUserMessage(@RequestParam String id,@PathVariable String judge){
-        List<CourseVo> courseList = memberService.getCourseList(id, judge);
+    @GetMapping("/getUser/{id}")
+    public R getUserMessage(@PathVariable String id){
+        List<CourseVo> courseList = memberService.getCourseList(id);
         return R.ok().data("course",courseList);
     }
 }

@@ -2,9 +2,9 @@ package com.hj.manageservice.service;
 
 import com.hj.manageservice.entity.EduExperiment;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hj.manageservice.vo.EduExperimentVo;
-import com.hj.manageservice.vo.ExperimentPages;
-import com.hj.manageservice.vo.ExperimentVO;
+import com.hj.manageservice.entity.vo.EduExperimentVo;
+import com.hj.manageservice.entity.vo.ExperimentPages;
+import com.hj.manageservice.entity.vo.ExperimentVO;
 
 import java.util.List;
 
@@ -26,4 +26,6 @@ public interface EduExperimentService extends IService<EduExperiment> {
 
     List<EduExperiment> GetListEXperiment(String courseId);
     ExperimentPages getPages(Long page, Long limit, ExperimentVO experimentVO);
+
+    boolean updateExperiment(EduExperimentVo eduExperiment);
 }

@@ -1,9 +1,6 @@
 package com.hj.manageservice.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hj.commonutils.R;
 import com.hj.commonutils.vo.UserVo;
 import com.hj.commonutils.vo.UserVos;
 import com.hj.manageservice.client.AclClient;
@@ -14,7 +11,7 @@ import com.hj.manageservice.service.EduCourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hj.manageservice.service.EduExperimentService;
 import com.hj.manageservice.service.FileService;
-import com.hj.manageservice.vo.TeacherCourse;
+import com.hj.manageservice.entity.vo.TeacherCourse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

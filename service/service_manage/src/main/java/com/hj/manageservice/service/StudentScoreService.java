@@ -2,7 +2,7 @@ package com.hj.manageservice.service;
 
 import com.hj.manageservice.entity.StudentScore;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hj.manageservice.vo.MaxMin;
+import com.hj.manageservice.entity.vo.MaxMin;
 
 /**
  * <p>

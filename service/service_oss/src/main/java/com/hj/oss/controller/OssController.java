@@ -20,14 +20,7 @@ public class OssController {
     public R uploadOssFile(@RequestParam("file") MultipartFile file){
         // 返回oss文件路径
         String url = ossService.uploadFileAvatar(file);
-        return R.ok().message("文件上传成功").data("url", url);
-    }
-    //上传文件的方法
-    @PostMapping
-    public String uploadOssFiles(@RequestParam("file") MultipartFile file){
-        // 返回oss文件路径
-        String url = ossService.uploadFileAvatar(file);
-        return url;
+        return R.ok().message("文件上传成功").data("url", url).data("name",file.getOriginalFilename());
     }
     @PostMapping("img/{id}/{eid}")
     public List<String> uploadImg(@RequestBody String[] imgLists,@PathVariable String id,@PathVariable String eid){

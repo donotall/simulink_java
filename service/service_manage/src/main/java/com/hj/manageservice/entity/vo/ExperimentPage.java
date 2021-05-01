@@ -1,8 +1,5 @@
-package com.hj.manageservice.vo;
+package com.hj.manageservice.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.hj.manageservice.entity.EduExperiment;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

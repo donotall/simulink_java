@@ -1,6 +1,8 @@
 package com.hj.educenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.JwtUtils;
 import com.hj.commonutils.MD5;
 import com.hj.commonutils.vo.CourseVo;
@@ -37,8 +39,6 @@ public class UcenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private UserCourseService userCourseService;
-    @Autowired
-    private UcenterMemberMapper ucenterMemberMapper;
     @Autowired
     private CourseClient courseClient;
 
@@ -141,38 +141,30 @@ public class UcenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
      * @return
      */
     @Override
-    public List<UcenterMember> getListByCourseId(String courseId) {
+    public IPage<UcenterMember> getListByCourseId(String courseId,Long page,Long limit) {
+        IPage<UcenterMember> ucenterMemberPage = new Page<>(page,limit);
         QueryWrapper<UserCourse> wrapper = new QueryWrapper<>();
         wrapper.eq("classid",courseId);
         List<UserCourse> userCourses = userCourseService.list(wrapper);
-        List<String> userIds= new ArrayList<>();
+        QueryWrapper<UcenterMember> wrapper1 = new QueryWrapper<>();
         for (UserCourse userCourse : userCourses) {
-            userIds.add(userCourse.getId());
+            wrapper1.eq("id",userCourse.getUserid());
         }
-        List<UcenterMember> ucenterMembers = baseMapper.selectBatchIds(userIds);
-        return ucenterMembers;
+        return baseMapper.selectPage(ucenterMemberPage, wrapper1);
     }
 
     @Override
     public boolean ChangeDisabled(String id, Integer disable) {
-        return ucenterMemberMapper.changeDisable(id,disable);
+        return baseMapper.changeDisable(id,disable);
     }
 
-    // 根据用户信息获取班课id
+    // 根据用户id获取班课id
     @Override
-    public List<CourseVo> getCourseList(String id, String judge) {
-        QueryWrapper<UcenterMember> wrapper = new QueryWrapper<>();
-        if(judge.equals("openid")){
-            wrapper.eq("openid",id);
-        }
-        if(judge.equals("mobile")){
-            wrapper.eq("mobile",id);
-        }
-        UcenterMember member = baseMapper.selectOne(wrapper);
+    public List<CourseVo> getCourseList(String id) {
         // 根据用户id查询班课id
-        QueryWrapper<UserCourse> wrapper2 = new QueryWrapper<>();
-        wrapper.eq("userid",member.getId());
-        List<UserCourse> list = userCourseService.list(wrapper2);
+        QueryWrapper<UserCourse> wrapper = new QueryWrapper<>();
+        wrapper.eq("userid",id);
+        List<UserCourse> list = userCourseService.list(wrapper);
         List<String> ids = new ArrayList<>();
         for(UserCourse userCourse:list){
             ids.add(userCourse.getClassid());

@@ -12,4 +12,6 @@ import java.util.Map;
 public interface UcenterClient {
     @GetMapping("/educenter/member/course/{courseId}")
     Map<String,String> getUserCourseId(@PathVariable("courseId") String courseId );
+    @GetMapping("/educenter/member/getInfoUc/{memberId}")
+    com.hj.commonutils.vo.UcenterMember getInfo(@PathVariable String memberId);
 }
