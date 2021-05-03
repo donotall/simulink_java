@@ -6,7 +6,15 @@
         <result column="max(score)" property="max" jdbcType="INTEGER" />
         <result column="min(score)" property="min" jdbcType="INTEGER"/>
     </resultMap>
+    <resultMap id="ExData" type="com.hj.manageservice.entity.vo.ExData">
+        <result column="max(score)" property="max" jdbcType="INTEGER" />
+        <result column="min(score)" property="min" jdbcType="INTEGER"/>
+        <result column="avg(score)" property="avg" jdbcType="DOUBLE"/>
+    </resultMap>
     <select id="getMaxMIn" resultMap="MaxMin">
         select max(score),min(score) from student_score where user_id =#{id}
+    </select>
+    <select id="getExData" resultMap="ExData">
+        select max(score),min(score),avg(score) from student_score where experiment_id =#{id} and is_score = 1;
     </select>
 </mapper>

@@ -60,11 +60,10 @@ public class StudentScoreController {
         QueryWrapper<StudentScore> wrapper = new QueryWrapper<>();
         wrapper.eq("experiment_id", id);
         //按照是否评分分组
-        wrapper.groupBy("is_score");
-        // 并且按照评分高低排序
-        wrapper.orderByAsc("score");
+        wrapper.groupBy("is_score","score");
        studentScoreService.page(pageParam, wrapper);
        List<Scores> scoresList = new ArrayList<>();
+       if(!pageParam.getRecords().isEmpty()){
         //根据实验id获取实验和根据用户id获取用户
         for(StudentScore studentScore:pageParam.getRecords()){
             Scores scores = new Scores();
@@ -75,6 +74,7 @@ public class StudentScoreController {
             scores.setUserName(member.getNickname());
             scoresList.add(scores);
         }
+       }
 
         return R.ok().data("items", scoresList).data("total", pageParam.getTotal());
     }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hj.manageservice.client.UcenterClient;
 import com.hj.manageservice.entity.EduExperiment;
 import com.hj.manageservice.entity.StudentScore;
+import com.hj.manageservice.entity.vo.ExData;
 import com.hj.manageservice.mapper.StudentScoreMapper;
 import com.hj.manageservice.service.EduExperimentService;
 import com.hj.manageservice.service.StudentScoreService;
@@ -88,5 +89,10 @@ public class StudentScoreServiceImpl extends ServiceImpl<StudentScoreMapper, Stu
     @Override
     public MaxMin getMaxMin(String id) {
         return baseMapper.getMaxMIn(id);
+    }
+
+    @Override
+    public ExData getExMaxMin(String id) {
+        return baseMapper.getExData(id);
     }
 }

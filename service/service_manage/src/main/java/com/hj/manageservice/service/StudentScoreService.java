@@ -2,6 +2,7 @@ package com.hj.manageservice.service;
 
 import com.hj.manageservice.entity.StudentScore;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hj.manageservice.entity.vo.ExData;
 import com.hj.manageservice.entity.vo.MaxMin;
 
 /**
@@ -17,4 +18,6 @@ public interface StudentScoreService extends IService<StudentScore> {
     void endTimeScore(String startTime,String endTime);
 
     MaxMin getMaxMin(String id);
+
+    ExData getExMaxMin(String id);
 }

@@ -59,8 +59,8 @@ public class UserController {
             wrapper.like("username",userQueryVo.getUsername());
         }
 
-        IPage<User> pageModel = userService.page(pageParam, wrapper);
-        return R.ok().data("items", pageModel.getRecords()).data("total", pageModel.getTotal());
+        userService.page(pageParam, wrapper);
+        return R.ok().data("items", pageParam.getRecords()).data("total", pageParam.getTotal());
     }
 
     @ApiOperation(value = "新增管理用户")

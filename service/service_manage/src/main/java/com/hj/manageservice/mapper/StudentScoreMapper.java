@@ -2,6 +2,7 @@ package com.hj.manageservice.mapper;
 
 import com.hj.manageservice.entity.StudentScore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hj.manageservice.entity.vo.ExData;
 import com.hj.manageservice.entity.vo.MaxMin;
 
 /**
@@ -14,4 +15,6 @@ import com.hj.manageservice.entity.vo.MaxMin;
  */
 public interface StudentScoreMapper extends BaseMapper<StudentScore> {
     MaxMin getMaxMIn(String id);
+
+    ExData getExData(String id);
 }

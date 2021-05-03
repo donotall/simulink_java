@@ -2,22 +2,18 @@ package com.hj.manageservice.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.R;
-import com.hj.manageservice.entity.EduExperiment;
-import com.hj.manageservice.entity.File;
-import com.hj.manageservice.entity.Img;
-import com.hj.manageservice.service.EduExperimentService;
-import com.hj.manageservice.service.FileService;
-import com.hj.manageservice.service.ImgService;
-import com.hj.manageservice.entity.vo.EduExperimentVo;
-import com.hj.manageservice.entity.vo.ExperimentPages;
-import com.hj.manageservice.entity.vo.ExperimentVO;
+import com.hj.manageservice.entity.*;
+import com.hj.manageservice.entity.vo.*;
+import com.hj.manageservice.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +33,10 @@ public class EduExperimentController {
     private FileService fileService;
     @Autowired
     private ImgService imgService;
+    @Autowired
+    private StudentScoreService studentScoreService;
+    @Autowired
+    private EduCourseService eduCourseService;
     // 添加实验
     @PostMapping("/addExperiment")
     public R AddCourse(@RequestBody EduExperimentVo eduExperiment){
@@ -98,6 +98,26 @@ public class EduExperimentController {
          ExperimentPages experimentPages = experimentService.getPages(page,limit,experimentVO);
         return R.ok().data("pages", experimentPages );
     }
-
+    // 获取所有的实验，显示每个实验的最高分，最低分和平均分分页查询
+    @GetMapping("/page/{page}/{limit}")
+    public R getScore(@PathVariable Long page,@PathVariable Long limit){
+        Page<EduExperiment> pageParam = new Page<>(page,limit);
+        experimentService.page(pageParam,null);
+        if(pageParam.getRecords().isEmpty()){
+            return R.ok();
+        }
+        List<ExperimentScoreResult> experimentScoreResultList = new ArrayList<>();
+        for (EduExperiment experiment: pageParam.getRecords()) {
+            ExperimentScoreResult experimentScoreResult = new ExperimentScoreResult();
+            BeanUtils.copyProperties(experiment,experimentScoreResult);
+            // 获取班课名
+            EduCourse course = eduCourseService.getById(experiment.getCourseId());
+            experimentScoreResult.setCourseName(course.getName());
+            // 获取实验最大最小值和平均值
+            experimentScoreResult.setExData(studentScoreService.getExMaxMin(experiment.getId()));
+            experimentScoreResultList.add(experimentScoreResult);
+        }
+        return R.ok().data("experiment",experimentScoreResultList);
+    }
 }
 
