@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.hj")
 public class SLserviceApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(SLserviceApplication.class,args);
     }
 }

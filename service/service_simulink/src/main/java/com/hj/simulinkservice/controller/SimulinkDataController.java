@@ -23,7 +23,8 @@ public class SimulinkDataController {
     @GetMapping("/getData/{port}")
     public  R GetData(@PathVariable int port){
         double[] datas= simulinkDataService.GetDataFromXpc(port);
+        String[] names = simulinkDataService.GetNameFromXpc(port);
         double time = SimulinkUtils.getInstance.xPCGetExecTime(port);
-        return R.ok().data("data",datas).data("currentTime",time);
+        return R.ok().data("data",datas).data("currentTime",time).data("SigName",names);
     }
 }

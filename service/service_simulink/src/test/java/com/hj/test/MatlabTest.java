@@ -2,12 +2,19 @@ package com.hj.test;
 
 
 import com.hj.commonutils.SimulinkUtils;
+import com.hj.simulinkservice.vo.ModelParams;
 import com.hj.simulinkservice.vo.TargetSettingVo;
 import com.mathworks.engine.EngineException;
 import com.mathworks.engine.MatlabEngine;
+import com.sun.jna.Memory;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import org.junit.Test;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -201,4 +208,41 @@ public class MatlabTest {
         // System.out.println(SimulinkUtils.getInstance.xPCGetSignalLabel(port,,""));
         System.out.println(SimulinkUtils.getInstance.xPCErrorMsg(SimulinkUtils.getInstance.xPCGetLastError(),message));
     }
+    @Test
+    public void test14() throws UnsupportedEncodingException, InterruptedException {
+        System.setProperty("jna.encoding","GBK");
+        System.out.println("jna.encoding");
+        int port = SimulinkUtils.getInstance.xPCOpenTcpIpPort("192.168.7.10","22222");
+        SimulinkUtils.getInstance.xPCLoadApp(port,"F:\\DataWorkeBase\\simulink\\service\\service_simulink\\target\\model","xpctank");
+        int numParams = SimulinkUtils.getInstance.xPCGetNumParams(port);
+        List<ModelParams> modelParamsList = new ArrayList<>();
+        for(int i=0;i<numParams;i++){
+            int[] nums = new int[2];
+            SimulinkUtils.getInstance.xPCGetParamDims(port,i,nums);
+            Pointer n2 = new Memory(128);
+            char[] s1 = new char[20];
+            SimulinkUtils.getInstance.xPCGetParamName(port,i,n2,s1);
+            double []paramValue = new double[nums[0]*nums[1]];
+            ModelParams modelParams = new ModelParams();
+            SimulinkUtils.getInstance.xPCGetParam(port,i,paramValue);
+            System.out.println();
+            String message = new String(String.valueOf(s1).getBytes("utf-16"), "utf-8");
+            String paramName = new String(n2.getByteArray(0, 128),"utf-8");
+
+            String result="";
+            for (int j=0;j<paramName.length();j++){
+                char c = paramName.charAt(j);
+                if(('a'<=c&&c<='z')||('A'<=c&&c<='Z'))
+                    result +=c;
+                else break;
+            }
+                modelParams.setBlockName("");//.substring(0,blockName.indexOf("\\")));
+            modelParams.setParamName(result);//.substring(0,blockName.indexOf("\\")));
+            modelParams.setVal(paramValue);
+            modelParamsList.add(modelParams);
+        }
+
+        System.out.println(111);
+    }
 }
+

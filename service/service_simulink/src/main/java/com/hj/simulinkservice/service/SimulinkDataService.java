@@ -6,4 +6,6 @@ public interface SimulinkDataService {
     boolean XPCAddScope(ScopeVo scopeVo);
 
     double[] GetDataFromXpc(int port);
+
+    String[] GetNameFromXpc(int port);
 }

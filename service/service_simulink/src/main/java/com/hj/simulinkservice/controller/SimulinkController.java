@@ -3,6 +3,7 @@ package com.hj.simulinkservice.controller;
 import com.hj.commonutils.R;
 import com.hj.simulinkservice.client.AttrClient;
 import com.hj.simulinkservice.service.SimulinkService;
+import com.hj.simulinkservice.vo.ModelParams;
 import com.hj.simulinkservice.vo.TargetSettingVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,10 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/simulink/")
@@ -93,5 +98,15 @@ public class SimulinkController {
     public R stopModel(@PathVariable int port){
         Boolean stop = simulinkService.stopModel(port);
         return stop?R.ok():R.error();
+    }
+    @GetMapping("getParams/{port}")
+    public R getModelParam(@PathVariable int port) throws UnsupportedEncodingException {
+        ModelParams[] params = simulinkService.getModelParams(port);
+        return R.ok().data("params",params);
+    }
+    @PutMapping("setParams/{port}/{fileName}")
+    public R updateParams(@PathVariable int port,@PathVariable String fileName,@RequestBody ModelParams[] modelParams){
+        Boolean flag = simulinkService.updateModelParams(port,fileName,modelParams);
+        return flag?R.ok():R.error();
     }
 }

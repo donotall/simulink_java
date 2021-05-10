@@ -32,4 +32,15 @@ public class SimulinkDataServiceImpl implements SimulinkDataService {
         }
         return sigVal;
     }
+
+    @Override
+    public String[] GetNameFromXpc(int port) {
+        // 获取连接总数
+        int  numSignals= SimulinkUtils.getInstance.xPCGetNumSignals(port);
+        String[] names = new String[numSignals];
+        for(int i=0;i<numSignals;i++){
+            names[i] = SimulinkUtils.getInstance.xPCGetSignalName(port,i,"");
+        }
+        return names;
+    }
 }

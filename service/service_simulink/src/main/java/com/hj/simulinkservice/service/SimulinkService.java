@@ -1,7 +1,12 @@
 package com.hj.simulinkservice.service;
 
+import com.hj.simulinkservice.vo.ModelParams;
 import com.hj.simulinkservice.vo.TargetSettingVo;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 
 public interface SimulinkService {
     TargetSettingVo GetSetting(int port);
@@ -23,4 +28,8 @@ public interface SimulinkService {
     boolean ModelStart(int port);
 
     Boolean stopModel(int port);
+
+    ModelParams[] getModelParams(int port) throws UnsupportedEncodingException;
+
+    Boolean updateModelParams(int port, String fileName, ModelParams[] modelParams);
 }
