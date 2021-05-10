@@ -71,7 +71,7 @@ public class EduExperimentController {
         //获取实验信息
         EduExperiment eduExperiment = experimentService.getById(experimentId);
         //获取实验文件列表
-       List<String> urlList = fileService.getFileList(experimentId);
+       List<File> urlList = fileService.getFileList(experimentId);
        // 获取图片列表
         QueryWrapper<Img> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id",id);
@@ -100,12 +100,13 @@ public class EduExperimentController {
     }
     // 获取所有的实验，显示每个实验的最高分，最低分和平均分分页查询
     @GetMapping("/page/{page}/{limit}")
-    public R getScore(@PathVariable Long page,@PathVariable Long limit){
+    public R getScore(@PathVariable Long page,@PathVariable Long limit,@RequestParam String name){
         Page<EduExperiment> pageParam = new Page<>(page,limit);
-        experimentService.page(pageParam,null);
-        if(pageParam.getRecords().isEmpty()){
-            return R.ok();
+        QueryWrapper<EduExperiment> wrapper = new QueryWrapper<>();
+        if(!name.equals("")){
+            wrapper.like("name",name);
         }
+        experimentService.page(pageParam,wrapper);
         List<ExperimentScoreResult> experimentScoreResultList = new ArrayList<>();
         for (EduExperiment experiment: pageParam.getRecords()) {
             ExperimentScoreResult experimentScoreResult = new ExperimentScoreResult();
@@ -113,11 +114,12 @@ public class EduExperimentController {
             // 获取班课名
             EduCourse course = eduCourseService.getById(experiment.getCourseId());
             experimentScoreResult.setCourseName(course.getName());
+            experimentScoreResult.setUserCreate(course.getUserCreate());
             // 获取实验最大最小值和平均值
             experimentScoreResult.setExData(studentScoreService.getExMaxMin(experiment.getId()));
             experimentScoreResultList.add(experimentScoreResult);
         }
-        return R.ok().data("experiment",experimentScoreResultList);
+        return R.ok().data("experiment",experimentScoreResultList).data("total",pageParam.getTotal());
     }
 }
 

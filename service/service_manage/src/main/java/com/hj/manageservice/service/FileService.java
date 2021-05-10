@@ -15,6 +15,6 @@ import java.util.List;
  */
 public interface FileService extends IService<File> {
 
-    List<String> getFileList(String experimentId);
+    List<File> getFileList(String experimentId);
     boolean deleteByExperimentId(String experimentId);
 }

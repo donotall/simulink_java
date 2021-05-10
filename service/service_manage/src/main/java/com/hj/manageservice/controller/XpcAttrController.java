@@ -2,11 +2,15 @@ package com.hj.manageservice.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.commonutils.R;
 import com.hj.manageservice.entity.XpcAttr;
+import com.hj.manageservice.entity.vo.XpcAttrVo;
 import com.hj.manageservice.service.XpcAttrService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -51,6 +55,29 @@ public class XpcAttrController {
     public R deleteAttr(@PathVariable String id){
         boolean b = xpcAttrService.removeById(id);
         return b?R.ok():R.error();
+    }
+    @GetMapping("/{page}/{limit}")
+    public  R getAttrPage(@PathVariable Long page, @PathVariable Long limit,XpcAttrVo xpcAttrVo){
+        Page<XpcAttr> pageParam = new Page<>(page, limit);
+        QueryWrapper<XpcAttr> wrapper = new QueryWrapper<>();
+        if(!StringUtils.isEmpty(xpcAttrVo.getIp())){
+            wrapper.like("ip",xpcAttrVo.getIp());
+        }
+        if(!StringUtils.isEmpty(xpcAttrVo.getPort())){
+            wrapper.like("port",xpcAttrVo.getPort());
+        }
+        xpcAttrService.page(pageParam,wrapper);
+        return R.ok().data("list",pageParam.getRecords()).data("total",pageParam.getTotal());
+    }
+    @PutMapping("/update")
+    public R updateXpcAttr(@RequestBody XpcAttr xpcAttr){
+        boolean updateById = xpcAttrService.updateById(xpcAttr);
+        return updateById?R.ok():R.error();
+    }
+    @PostMapping("/saveBatch")
+    public R saveBatch(@RequestParam(value = "file", required = true) MultipartFile file){
+       xpcAttrService.saveBatchUseFile(file,xpcAttrService);
+       return R.ok();
     }
 }
 

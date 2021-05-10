@@ -17,4 +17,5 @@ public class ExperimentScoreResult {
     private String courseId;
     private ExData exData;
     private String courseName;
+    private String userCreate;
 }

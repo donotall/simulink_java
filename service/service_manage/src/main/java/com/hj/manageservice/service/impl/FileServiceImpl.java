@@ -23,17 +23,10 @@ import java.util.List;
 public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements FileService {
     //获取文件url List 集合
     @Override
-    public List<String> getFileList(String experimentId) {
+    public List<File> getFileList(String experimentId) {
         QueryWrapper<File> wrapper = new QueryWrapper<>();
         wrapper.eq("experiment_id",experimentId);
-        List<File> fileList = baseMapper.selectList(wrapper);
-        List<String> urls = new ArrayList<>();
-        if(!fileList.isEmpty()){
-            for (File fileUrl:fileList) {
-                urls.add(fileUrl.getUrl());
-            }
-        }
-        return urls;
+        return baseMapper.selectList(wrapper);
     }
 
     @Override
