@@ -30,8 +30,9 @@ public class MsmServiceImpl implements MsmService {
 
         if(StringUtils.isEmpty(phone)) return false;
 
+        // 阿里云的AccessKey AccessKeyID
         DefaultProfile profile =
-                DefaultProfile.getProfile("default", "LTAI4GEF5XSurPfkGajzHf9E", "84rKZ2cTVRghBuxV8VZ6ajowXsHX0I");
+                DefaultProfile.getProfile("default", "", "");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
